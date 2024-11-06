@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour {
    private int jumpCount = 0; // 누적 점프 횟수
    private bool isGrounded = false; // 바닥에 닿았는지 나타냄
    private bool isDead = false; // 사망 상태
+   public float speed = 8f;
 
-   private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
+    private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
    private Animator animator; // 사용할 애니메이터 컴포넌트
    private AudioSource playerAudio; // 사용할 오디오 소스 컴포넌트
 
@@ -24,8 +25,22 @@ public class PlayerController : MonoBehaviour {
         if (isDead)
             return;
 
+        // Player 이동 x축
+        // 수평축의 입력값을 감지하여 저장
+        float xInput = Input.GetAxis("Horizontal");     // 수평(x축)
+
+        // 실제 이동 속도를 입력값과 이동 속력을 사용해 설정
+        float xSpeed = xInput * speed;
+
+        // Vector2 속도를 (xSpeed, 0, zSpeed) 설정
+        Vector2 newVelocity = new Vector2(xSpeed, playerRigidbody.velocity.y);
+
+        // Rigidbody.velocity
+        playerRigidbody.velocity = newVelocity;
+
+        // Player 점프
         // 사용자 입력을 감지하고 점프하는 처리
-        if (Input.GetMouseButtonDown(0) && jumpCount < 2)
+        if (Input.GetKeyDown("space") && jumpCount < 2)
         {
             // 점프 횟수 증가
             ++jumpCount;
@@ -38,7 +53,7 @@ public class PlayerController : MonoBehaviour {
             playerAudio.Play();
         }
 
-        //animator.SetBool("Grounded", isGrounded);
+        animator.SetBool("Grounded", isGrounded);
    }
 
    private void Die() {
@@ -50,10 +65,13 @@ public class PlayerController : MonoBehaviour {
    }
 
    private void OnCollisionEnter2D(Collision2D collision) {
-       // 바닥에 닿았음을 감지하는 처리
-   }
+        // 바닥에 닿았음을 감지하는 처리
+        isGrounded = true;
+        jumpCount = 0;
+    }
 
    private void OnCollisionExit2D(Collision2D collision) {
-       // 바닥에서 벗어났음을 감지하는 처리
-   }
+        // 바닥에서 벗어났음을 감지하는 처리
+        isGrounded = false;
+    }
 }
