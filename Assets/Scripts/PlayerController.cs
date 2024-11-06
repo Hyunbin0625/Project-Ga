@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour {
         // Rigidbody.velocity
         playerRigidbody.velocity = newVelocity;
 
+        //test/Camera
+
         // Player 점프
         // 사용자 입력을 감지하고 점프하는 처리
         if (Input.GetKeyDown("space") && jumpCount < 2)
