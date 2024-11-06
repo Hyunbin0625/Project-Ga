@@ -38,7 +38,8 @@ public class PlayerController : MonoBehaviour {
         // Rigidbody.velocity
         playerRigidbody.velocity = newVelocity;
 
-        //test/Camera
+        //test/master
+
 
         // Player 점프
         // 사용자 입력을 감지하고 점프하는 처리
