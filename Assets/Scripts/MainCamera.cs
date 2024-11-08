@@ -7,7 +7,7 @@ public class MainCamera : MonoBehaviour
 {
     public Transform target;    // Player 정보
     public float offsetZ;       // Player와 카메라 Z 거리
-    public float smoothSpeed = 0.125f; // 카메라의 딜레이 속도
+    public float smoothSpeed = 2.0f; // 카메라의 딜레이 속도
     public float Speed;
     // Start is called before the first frame update
     void Start()

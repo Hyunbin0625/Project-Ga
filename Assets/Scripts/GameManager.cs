@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
     public Text scoreText; // 점수를 출력할 UI 텍스트
     public GameObject gameoverUI; // 게임 오버시 활성화 할 UI 게임 오브젝트
 
-    private int score = 0; // 게임 점수
+    //private int score = 0; // 게임 점수
 
     // 게임 시작과 동시에 싱글톤을 구성
     void Awake() {
