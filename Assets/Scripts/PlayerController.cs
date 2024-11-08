@@ -11,13 +11,13 @@ public class PlayerController : MonoBehaviour {
     private bool isDead = false; // 사망 상태
     public float speed = 8f;
     
-    private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
+    private Rigidbody playerRigidbody; // 사용할 리지드바디 컴포넌트
     private Animator animator; // 사용할 애니메이터 컴포넌트
     private AudioSource playerAudio; // 사용할 오디오 소스 컴포넌트
     
     private void Start() {
         // 초기화
-        playerRigidbody = GetComponent<Rigidbody2D>();
+        playerRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
     }
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
         }
         
         // Vector2 속도를 (xSpeed, 원래 ySpeed) 설정
-        Vector2 newVelocity = new Vector2(xSpeed, playerRigidbody.velocity.y);
+        Vector3 newVelocity = new Vector3(xSpeed, playerRigidbody.velocity.y, playerRigidbody.velocity.z);
         
         // Rigidbody.velocity
         playerRigidbody.velocity = newVelocity;
@@ -63,10 +63,10 @@ public class PlayerController : MonoBehaviour {
             
             // 점프 직전에 속도를 순간적으로 (0, 0)
             // new Vector2(0, 0)
-            playerRigidbody.velocity = Vector2.zero;
+            playerRigidbody.velocity = Vector3.zero;
             
             // 리지드바디에 위쪽으로 힘 추가
-            playerRigidbody.AddForce(new Vector2 (0, jumpForce));
+            playerRigidbody.AddForce(new Vector3(0, jumpForce));
             
             // 오디오 소스 재생
             playerAudio.Play();
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour {
         playerRigidbody.position = new Vector3(-6, 1, 0);   // 물리적인 상호작용(중력, 충돌 등)을 비활성화
     }
     
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerEnter(Collider other) {
         // 트리거 콜라이더를 가진 장애물과의 충돌을 감지
         if (other.gameObject.name == "Deadzone")
         {
@@ -95,13 +95,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    private void OnCollisionEnter2D(Collision2D collision) {
+    private void OnCollisionEnter(Collision collision) {
          // 바닥에 닿았음을 감지하는 처리
          isGrounded = true;
          jumpCount = 0;
     }
     
-    private void OnCollisionExit2D(Collision2D collision) {
+    private void OnCollisionExit(Collision collision) {
          // 바닥에서 벗어났음을 감지하는 처리
          isGrounded = false;
     }
