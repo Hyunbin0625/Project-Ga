@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour {
 
     void Update() {
         // 게임 오버 상태에서 게임을 재시작할 수 있게 하는 처리
+        
+        // git GameManager 브랜치 테스트
     }
 
     // 점수를 증가시키는 메서드
