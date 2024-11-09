@@ -569,6 +569,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1757670024}
   - component: {fileID: 1757670025}
+  - component: {fileID: 1757670026}
   m_Layer: 0
   m_Name: Deadzone
   m_TagString: Untagged
@@ -612,6 +613,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 20, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1757670026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757670022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49183a8e7ac72940885440b794855c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1800070794}
 --- !u!1 &1800070791
 GameObject:
   m_ObjectHideFlags: 0
