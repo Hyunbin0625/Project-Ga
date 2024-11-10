@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 // PlayerController는 플레이어 캐릭터로서 Player 게임 오브젝트를 제어한다.
 public class PlayerController : MonoBehaviour {
@@ -14,12 +16,17 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody playerRigidbody; // 사용할 리지드바디 컴포넌트
     private Animator animator; // 사용할 애니메이터 컴포넌트
     private AudioSource playerAudio; // 사용할 오디오 소스 컴포넌트
-    
+
+    public float invincibilityDuration = 2f; // 무적 지속 시간 (초)
+    private bool isInvincible = false;       // 무적 상태 여부
+    private Renderer playerRenderer;         // 플레이어의 Renderer
+
     private void Start() {
         // 초기화
         playerRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
+        playerRenderer = GetComponent<Renderer>(); // 플레이어의 Renderer 컴포넌트 가져오기 (시각적 효과를 위해)
     }
     
     private void Update() {
@@ -85,7 +92,21 @@ public class PlayerController : MonoBehaviour {
         //playerRigidbody.isKinematic = true;
         playerRigidbody.position = new Vector3(-6, 1, 0);   // 물리적인 상호작용(중력, 충돌 등)을 비활성화
     }
-    
+    private IEnumerator ActivateInvincibility()
+    {
+        isInvincible = true; // 무적 상태 활성화
+
+        // 무적 시각적 효과 (깜빡임 효과)
+        for (float i = 0; i < invincibilityDuration; i += 0.2f)
+        {
+            playerRenderer.enabled = !playerRenderer.enabled; // 깜빡임 효과
+            yield return new WaitForSeconds(0.2f);            // 0.2초 간격으로 깜빡임
+        }
+        playerRenderer.enabled = true; // 무적 해제 시 원래 상태로 복구
+
+        isInvincible = false; // 무적 상태 해제
+    }
+
     private void OnTriggerEnter(Collider other) {
         // 트리거 콜라이더를 가진 장애물과의 충돌을 감지
         if (other.gameObject.name == "Deadzone")
@@ -96,13 +117,43 @@ public class PlayerController : MonoBehaviour {
     }
     
     private void OnCollisionEnter(Collision collision) {
-         // 바닥에 닿았음을 감지하는 처리
-         isGrounded = true;
-         jumpCount = 0;
+        if (collision.gameObject.CompareTag("Monster") && !isInvincible)
+        {
+            StartCoroutine(ActivateInvincibility()); // 무적 상태 활성화 코루틴 시작
+
+            // 플레이어가 몬스터와 충돌했을 때 뒤로 밀리게 하는 힘 추가
+            Vector3 knockbackDirection = (transform.position - collision.transform.position).normalized;
+            knockbackDirection = new Vector3(knockbackDirection.x * 50f, 1f, 0); // X축으로만 움직이도록 Y, Z값을 0으로 설정
+            float knockbackForce = 500f; // 뒤로 밀리는 힘의 크기
+            playerRigidbody.AddForce(knockbackDirection * knockbackForce);
+        }
+        else
+        {
+            // 바닥에 닿았음을 감지하는 처리
+            isGrounded = true;
+            jumpCount = 0;
+        }
+
     }
-    
+
+    private void OnCollisionStay(Collision collision)
+    {
+        // 몬스터와 충돌한 경우
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+        }
+            
+    }
+
     private void OnCollisionExit(Collision collision) {
-         // 바닥에서 벗어났음을 감지하는 처리
-         isGrounded = false;
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+            // 몬스터와 충돌을 벗어난 경우
+        }
+        else
+        {
+            // 바닥에서 벗어났음을 감지하는 처리
+            isGrounded = false;
+        }
     }
 }
