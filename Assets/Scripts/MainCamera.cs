@@ -8,7 +8,7 @@ public class MainCamera : MonoBehaviour
     public Transform target;    // Player 정보
     public float offsetZ;       // Player와 카메라 Z 거리
     public float smoothSpeed = 2.0f; // 카메라의 딜레이 속도
-    public float Speed;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +18,16 @@ public class MainCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+        Vector3 targetPosition;
+        if (target.position.y + 2.5f >= 4.0f)
+        {
+            targetPosition = new Vector3(target.position.x, 4.0f, offsetZ);
+        }
+        else
+        {
+            targetPosition = new Vector3(target.position.x, target.position.y + 2.5f, offsetZ);
+        }
+        
 
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
 

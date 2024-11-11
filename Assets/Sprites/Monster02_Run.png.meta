@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ebae13e1e3887b040981f11bcc3cbbb2
+guid: 67bd27bd1f8a57c49a2475c1f97d2fc7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,7 +39,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 0
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -123,7 +123,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Monster01_Idle_0
+      name: Monster02_Run_0
       rect:
         serializedVersion: 2
         x: 0
@@ -137,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbbdf19dc13afce4cb0e8c6469bcd441
-      internalID: 417256645
+      spriteID: c45f987617e7fd04a8cb1572d044f80a
+      internalID: -674921878
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Monster01_Idle_1
+      name: Monster02_Run_1
       rect:
         serializedVersion: 2
         x: 80
@@ -158,14 +158,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5ca037f4f05700499046e90f872bdda
-      internalID: -164081803
+      spriteID: 2473fbc4d27a33544b0f02da02a0278a
+      internalID: -205896301
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Monster01_Idle_2
+      name: Monster02_Run_2
       rect:
         serializedVersion: 2
         x: 160
@@ -179,14 +179,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2c54e576653a3d4ca8514c1f117d4a4
-      internalID: -477681770
+      spriteID: a1c2bf740d99ca442adba03b341fb9bb
+      internalID: 331290779
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Monster01_Idle_3
+      name: Monster02_Run_3
       rect:
         serializedVersion: 2
         x: 240
@@ -200,8 +200,134 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86aef2a26c7ff2d439b2e488aea3d060
-      internalID: -1885514741
+      spriteID: dee57a434c40c0e4b907a7a907ba9851
+      internalID: -1334181830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cdfd940da0dfca4ba9e302297116d02
+      internalID: -669462296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_5
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee60dd8efc0a5494486a82ca7c396a76
+      internalID: 188354890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_6
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ec44f6852281e84e8dc2d98510aac2f
+      internalID: 365029326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_7
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f538106b03965a546aac88a654620ad3
+      internalID: -477060248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_8
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b7169be800b19e49a2f171f9e95f1ad
+      internalID: -1756077954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Monster02_Run_9
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cc5dc0bf02787947bb564f262b9b269
+      internalID: -415714168
       vertices: []
       indices: 
       edges: []
@@ -209,7 +335,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 07538669da80a564a9e5b05830e57485
+    spriteID: 6f2ba6ef702b2064b87e87cd1947ffe2
     internalID: 0
     vertices: []
     indices: 
@@ -217,10 +343,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Monster01_Idle_0: 417256645
-      Monster01_Idle_1: -164081803
-      Monster01_Idle_2: -477681770
-      Monster01_Idle_3: -1885514741
+      Monster02_Run_0: -674921878
+      Monster02_Run_1: -205896301
+      Monster02_Run_2: 331290779
+      Monster02_Run_3: -1334181830
+      Monster02_Run_4: -669462296
+      Monster02_Run_5: 188354890
+      Monster02_Run_6: 365029326
+      Monster02_Run_7: -477060248
+      Monster02_Run_8: -1756077954
+      Monster02_Run_9: -415714168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

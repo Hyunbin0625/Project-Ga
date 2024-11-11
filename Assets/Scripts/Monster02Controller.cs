@@ -2,28 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster01Controller : MonoBehaviour
+public class Monster02Controller : MonoBehaviour
 {
     public enum Direction { Left, Right } // 방향을 나타내는 enum
 
-    public float chaseDistance = 7f;  // 플레이어를 추격할 거리
-    public float speed = 3f;           // 몬스터의 이동 속도
+    public float chaseDistance = 7f;    // 플레이어를 추격할 거리
+    public float speed = 3f;            // 몬스터의 이동 속도
+    public float chargeDistance = 2f;   // 돌진 시작 거리
+    public float chargeSpeed = 6f;      // 돌진 속도
+    public float chargeCooldown = 5f;   // 돌진 쿨타임
     public float idleTime = 1f;         // Idle 상태 유지 시간
     public float moveTime = 2f;         // Move 상태 유지 시간
     private float currentTime = 0f;     // 흐른 시간 저장
+    private float currentChargeTime = 0f; // 마지막 돌진 시간을 저장하는 변수
 
     private Transform player;           // 플레이어의 위치를 저장할 변수
     private Animator animator;          // 몬스터 애니메이션을 제어할 애니메이터 컴포넌트
     private new Rigidbody rigidbody;    // 사용할 리지드바디 컴포넌트
     private Animator anim;              // 사용할 애니메이션 컴포넌트
 
-    private bool isChasing = false;    // 현재 몬스터가 추격 중인지 여부를 저장하는 변수
-    private bool isMovingRandomly = false; // Move와 Idle 상태를 반복하는 상태인지 여부
-    private bool isMoving = false;  // StopChasing의 상태에서 현재 움직이고 있는지
-    private bool isInPlatformZone = false; // platformzone과 충돌 여부를 저장하는 변수
-    private bool isAttack = false;  // 현재 몬스터가 공격 중인지 여부를 저장하는 변수
+    private bool isChasing = false;     // 현재 몬스터가 추격 중인지 여부를 저장하는 변수
+    private bool isCharging = false;    // 현재 돌진 중인지 여부를 저장하는 변수
+    private bool isMovingRandomly = false;  // Move와 Idle 상태를 반복하는 상태인지 여부
+    private bool isMoving = false;      // StopChasing의 상태에서 현재 움직이고 있는지
+    private bool isInPlatformZone = false;  // platformzone과 충돌 여부를 저장하는 변수
+    private bool isAttack = false;      // 현재 몬스터가 공격 중인지 여부를 저장하는 변수
 
-    private Direction currentDirection;   // 현재 이동 방향을 저장하는 변수
+    private Direction currentDirection; // 현재 이동 방향을 저장하는 변수
 
     // Start is called before the first frame update
     void Start()
@@ -38,11 +43,17 @@ public class Monster01Controller : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);  // 몬스터와 플레이어 사이의 거리를 계산
-
-        if (!isAttack && distanceToPlayer <= chaseDistance)  // 플레이어가 추격 거리 내에 있지만 공격 거리 밖에 있는지 확인
+        
+        if (currentChargeTime <= chargeCooldown)
+            currentChargeTime += Time.deltaTime;
+        if (distanceToPlayer <= chargeDistance && !isCharging && currentChargeTime >= chargeCooldown) // 공격 사거리 내에 플레이어가 있는 경우
+        {
+            StartCharging(); // 돌진 시작
+        }
+        else if (!isAttack && distanceToPlayer <= chaseDistance)  // 플레이어가 추격 거리 내에 있지만 공격 거리 밖에 있는지 확인
         {
             isMovingRandomly = false;   // 추격 상태가 아니니, false 초기화
-            
+
             StartChasing();  // 추격 시작
         }
         else if (!isAttack)
@@ -51,7 +62,7 @@ public class Monster01Controller : MonoBehaviour
         }
 
         // 현재 애니메이션이 체크하고자 하는 애니메이션인지 확인
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Monster01_Attack") == true)
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Monster02_Attack") == true)
         {
             isAttack = true;
         }
@@ -94,8 +105,32 @@ public class Monster01Controller : MonoBehaviour
     void StopChasing()
     {
         isChasing = false;  // 추격 중 상태 해제
-
         RandomMoveIdleRoutine(); // Move/Idle 반복 시작
+    }
+
+    void StartCharging()
+    {
+        isCharging = true;
+        currentChargeTime = 0f; // 현재 시간을 마지막 돌진 시간으로 저장
+        StartCoroutine(ChargeTowardsPlayer());
+    }
+
+    private IEnumerator ChargeTowardsPlayer()
+    {
+        float chargeDuration = 0.5f; // 돌진 지속 시간 (초)
+        float chargeElapsed = 0f;
+
+        Vector3 direction = (player.position - transform.position).normalized;  // 몬스터에서 플레이어로의 방향을 계산하고 정규화
+
+        // 돌진 중일 때
+        while (chargeElapsed < chargeDuration)
+        {
+            transform.position += new Vector3(direction.x * speed * Time.deltaTime, 0, 0);  // 방향을 따라 속도에 맞춰 몬스터 이동
+            chargeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        isCharging = false; // 돌진 종료
     }
 
     void ChasePlayer()
@@ -149,7 +184,7 @@ public class Monster01Controller : MonoBehaviour
                 isMoving = false;   // 다음 순서인 Idle 실행을 위해, false 저장
                 SetRandomDirection(); // 미리 다음 방향을 설정
             }
-            else if(isInPlatformZone)   // 벽과 충돌 했을 때
+            else if (isInPlatformZone)   // 벽과 충돌 했을 때
             {
                 currentTime = 0f;   // 사용한 currentTime 초기화
                 isMoving = false;   // 다음 순서인 Idle 실행을 위해, false 저장
@@ -183,13 +218,13 @@ public class Monster01Controller : MonoBehaviour
         if (other.gameObject.name == "Platformzone_L")
         {
             isInPlatformZone = true;
-            if(!isChasing)
+            if (!isChasing)
                 transform.position += Vector3.right * speed * Time.deltaTime;    // 반대 방향으로 이동
         }
         else if (other.gameObject.name == "Platformzone_R")
         {
             isInPlatformZone = true;
-            if(!isChasing)
+            if (!isChasing)
                 transform.position += Vector3.left * speed * Time.deltaTime;    // 반대 방향으로 이동
         }
     }

@@ -67,7 +67,8 @@ public class PlayerController : MonoBehaviour {
         {
             // 점프 횟수 증가
             ++jumpCount;
-            
+            isGrounded = false;
+
             // 점프 직전에 속도를 순간적으로 (0, 0)
             // new Vector2(0, 0)
             playerRigidbody.velocity = Vector3.zero;
@@ -129,9 +130,12 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            // 바닥에 닿았음을 감지하는 처리
-            isGrounded = true;
-            jumpCount = 0;
+            if (collision.contacts[0].normal.y > 0.7f)   // 충돌한 것 중 첫 번째,  0.7f는 각도
+            {
+                // 바닥에 닿았음을 감지하는 처리
+                isGrounded = true;
+                jumpCount = 0;
+            }
         }
 
     }
@@ -152,8 +156,7 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            // 바닥에서 벗어났음을 감지하는 처리
-            isGrounded = false;
+
         }
     }
 }
