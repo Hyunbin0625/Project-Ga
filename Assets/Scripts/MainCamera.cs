@@ -18,14 +18,18 @@ public class MainCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        // 로컬 x축 방향을 기준으로 이동 벡터 계산 (회전된 방향 반영)
+        Vector3 moveDirection = new Vector3(transform.right.z * offsetZ, transform.right.y, transform.right.x * offsetZ);
+
         Vector3 targetPosition;
         if (target.position.y + 2.5f >= 4.0f)
         {
-            targetPosition = new Vector3(target.position.x, 4.0f, offsetZ);
+
+            targetPosition = new Vector3(target.position.x - moveDirection.x, 4.0f, target.position.z + moveDirection.z);
         }
         else
         {
-            targetPosition = new Vector3(target.position.x, target.position.y + 2.5f, offsetZ);
+            targetPosition = new Vector3(target.position.x - moveDirection.x, target.position.y + 2.5f, target.position.z + moveDirection.z);
         }
         
 

@@ -12,14 +12,17 @@ public class PlayerController : MonoBehaviour {
     private bool isMoved = false;
     private bool isDead = false; // 사망 상태
     public float speed = 8f;
-    
+        
     private Rigidbody playerRigidbody; // 사용할 리지드바디 컴포넌트
     private Animator animator; // 사용할 애니메이터 컴포넌트
     private AudioSource playerAudio; // 사용할 오디오 소스 컴포넌트
 
     public float invincibilityDuration = 2f; // 무적 지속 시간 (초)
     private bool isInvincible = false;       // 무적 상태 여부
+    public bool GetIsInvincible() { return isInvincible; }
     private Renderer playerRenderer;         // 플레이어의 Renderer
+
+    private HPManager playerHPManager;
 
     private void Start() {
         // 초기화
@@ -27,41 +30,43 @@ public class PlayerController : MonoBehaviour {
         animator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         playerRenderer = GetComponent<Renderer>(); // 플레이어의 Renderer 컴포넌트 가져오기 (시각적 효과를 위해)
+        
+        playerHPManager = GetComponent<HPManager>();
     }
     
     private void Update() {
         if (isDead)
             return;
-    
+
 
         // Player 이동 x축
         // 수평축의 입력값을 감지하여 저장
-        float xInput = Input.GetAxis("Horizontal");     // 수평(x축)
+        float horizontalInput = Input.GetAxis("Horizontal");     // 수평(x축)
 
         // 수평축의 입력값이 있는지 확인하여 isMoved 설정
-        isMoved = !Mathf.Approximately(xInput, 0);     // 수평(x축)
+        isMoved = !Mathf.Approximately(horizontalInput, 0);     // 수평(x축)
 
-        // 실제 이동 속도를 입력값과 이동 속력을 사용해 설정
-        float xSpeed = xInput * speed;
-        
+        // 로컬 x축 방향을 기준으로 이동 벡터 계산 (회전된 방향 반영)
+        Vector3 moveDirection = transform.right * horizontalInput * speed;
+
+        // 기존 y축 속도는 유지하면서 x와 z축 방향 이동 설정
+        Vector3 newVelocity = new Vector3(moveDirection.x, playerRigidbody.velocity.y, moveDirection.z);
+
         // 플레이어의 이동 방향에 따라 스프라이트 반전 설정
-        if (xInput < 0)
+        if (horizontalInput < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-        else if (xInput > 0)
+        else if (horizontalInput > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        
-        // Vector2 속도를 (xSpeed, 원래 ySpeed) 설정
-        Vector3 newVelocity = new Vector3(xSpeed, playerRigidbody.velocity.y, playerRigidbody.velocity.z);
-        
+
         // Rigidbody.velocity
         playerRigidbody.velocity = newVelocity;
     
 
-        // Player 점프
+        // Player 점프    
         // 사용자 입력을 감지하고 점프하는 처리
         if (Input.GetKeyDown("space") && jumpCount < 2)
         {
@@ -85,13 +90,14 @@ public class PlayerController : MonoBehaviour {
         animator.SetBool("Moved", isMoved);
     }
     
-    private void Die() {
+    public void Die() {
         // 사망 처리
+        isDead = true;
         animator.SetTrigger("Die");
         playerAudio.PlayOneShot(deathClip);
-        //playerRigidbody.velocity = Vector2.zero;  // 플레이어의 물리적 속도를 (0, 0)
-        //playerRigidbody.isKinematic = true;
-        playerRigidbody.position = new Vector3(-6, 1, 0);   // 물리적인 상호작용(중력, 충돌 등)을 비활성화
+        playerRigidbody.velocity = Vector2.zero;  // 플레이어의 물리적 속도를 (0, 0)
+        playerRigidbody.isKinematic = true;
+        //playerRigidbody.position = new Vector3(-6, 1, 0);   // 물리적인 상호작용(중력, 충돌 등)을 비활성화
     }
     private IEnumerator ActivateInvincibility()
     {
@@ -110,16 +116,20 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         // 트리거 콜라이더를 가진 장애물과의 충돌을 감지
-        if (other.gameObject.name == "Deadzone")
+        if (other.gameObject.name == "Deadzone" && !isDead)
         {
-            isDead = true;
             Die();
         }
     }
     
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.CompareTag("Monster") && !isInvincible)
+        if (collision.gameObject.CompareTag("Monster") && !isInvincible && !isDead)
         {
+            if (!isInvincible)
+            {
+                playerHPManager.TakeDamage(1);
+            }
+
             StartCoroutine(ActivateInvincibility()); // 무적 상태 활성화 코루틴 시작
 
             // 플레이어가 몬스터와 충돌했을 때 뒤로 밀리게 하는 힘 추가
