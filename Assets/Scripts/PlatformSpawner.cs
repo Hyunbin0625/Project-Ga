@@ -9,6 +9,7 @@ public class PlatformSpawner : MonoBehaviour
     private GameObject currentPlatform; // 현재 생성된 발판
     private int platformCount = 0;  // 생성된 플랫폼 수, 단계
 
+    public MonsterSpawner monsterSpawner;  // MonsterSpawner 참조
     private List<GameObject> platforms = new List<GameObject>(); // 생성된 플랫폼을 저장할 리스트
     private int maxPlatforms = 3; // 최대 플랫폼 개수
 
@@ -68,6 +69,9 @@ public class PlatformSpawner : MonoBehaviour
             platformTrigger.SetPlatformRotation(0);
             platformTrigger.SetInitialPlayerRotation(0);
         }
+
+        // 몬스터 스포너에서 해당 플랫폼에 몬스터 생성
+        monsterSpawner.SpawnMonstersForPlatform(newPlatform, platformCount - 1);
     }
 
     void SpawnPlatform()
@@ -109,6 +113,9 @@ public class PlatformSpawner : MonoBehaviour
                 platformTrigger.SetPlatformRotation(randomYRotation);
                 platformTrigger.SetInitialPlayerRotation(lastPlatform.GetComponentInChildren<PlatformTrigger>().GetPlatformRotation());
             }
+            
+            // 몬스터 스포너에서 해당 플랫폼에 몬스터 생성
+            monsterSpawner.SpawnMonstersForPlatform(newPlatform, platformCount - 1);
         }
     }
 
@@ -119,6 +126,9 @@ public class PlatformSpawner : MonoBehaviour
         // 최대 개수를 초과하면 가장 오래된 플랫폼 삭제
         if (platforms.Count >= maxPlatforms)
         {
+            // 플랫폼의 생성된 몬스터 파괴
+            monsterSpawner.RemoveMonstersForPlatform(platforms[0]);
+
             Destroy(platforms[0]);  // 첫번째 플랫폼 파괴
             platforms.RemoveAt(0);  // 
         }

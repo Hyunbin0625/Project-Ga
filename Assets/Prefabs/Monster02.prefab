@@ -173,5 +173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chaseDistance: 7
   speed: 3
+  chargeDistance: 2
+  chargeSpeed: 6
+  chargeCooldown: 3
   idleTime: 1
   moveTime: 2

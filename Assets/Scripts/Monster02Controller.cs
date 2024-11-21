@@ -121,11 +121,12 @@ public class Monster02Controller : MonoBehaviour
         float chargeElapsed = 0f;
 
         Vector3 direction = (player.position - transform.position).normalized;  // 몬스터에서 플레이어로의 방향을 계산하고 정규화
+        Vector3 moveDirection = transform.right * direction.x * speed;  // 방향에 따른 x, z값 구하기
 
         // 돌진 중일 때
         while (chargeElapsed < chargeDuration)
         {
-            transform.position += new Vector3(direction.x * speed * Time.deltaTime, 0, 0);  // 방향을 따라 속도에 맞춰 몬스터 이동
+            transform.position += new Vector3(moveDirection.x, 0, moveDirection.z) * Time.deltaTime;  // 방향을 따라 속도에 맞춰 몬스터 이동
             chargeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -138,7 +139,9 @@ public class Monster02Controller : MonoBehaviour
         animator.SetBool("Moved", true);  // "isRunning" 애니메이션을 활성화
 
         Vector3 direction = (player.position - transform.position).normalized;  // 몬스터에서 플레이어로의 방향을 계산하고 정규화
-        transform.position += new Vector3(direction.x * speed * Time.deltaTime, 0, 0);  // 방향을 따라 속도에 맞춰 몬스터 이동
+        Vector3 moveDirection = transform.right * direction.x * speed;  // 방향에 따른 x, z값 구하기
+
+        transform.position += new Vector3(moveDirection.x, 0, moveDirection.z) * Time.deltaTime;  // 방향을 따라 속도에 맞춰 몬스터 이동
 
         if (direction.x > 0)
         {
@@ -167,14 +170,16 @@ public class Monster02Controller : MonoBehaviour
             currentTime += Time.deltaTime;      // 흐른 시간 저장
             animator.SetBool("Moved", true);    // Move 상태 시작
 
+            Vector3 moveDirection = transform.right * speed;
+
             if (currentDirection == Direction.Left) // 랜덤 방향, 왼쪽
             {
-                transform.position += Vector3.left * speed * Time.deltaTime;    // 해당 방향으로 이동
+                transform.position += new Vector3(Vector3.left.x * moveDirection.x, 0, -moveDirection.z) * Time.deltaTime;    // 해당 방향으로 이동
                 transform.localScale = new Vector3(-1, 1, 1); // 왼쪽을 향하도록 스케일 변경
             }
             else if (currentDirection == Direction.Right)   // 랜덤 방향, 오른쪽
             {
-                transform.position += Vector3.right * speed * Time.deltaTime;   // 해당 방향으로 이동
+                transform.position += new Vector3(Vector3.right.x * moveDirection.x, 0, moveDirection.z) * Time.deltaTime;    // 해당 방향으로 이동
                 transform.localScale = new Vector3(1, 1, 1); // 오른쪽을 향하도록 스케일 변경
             }
 

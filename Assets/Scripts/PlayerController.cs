@@ -20,7 +20,9 @@ public class PlayerController : MonoBehaviour {
     public float invincibilityDuration = 2f; // 무적 지속 시간 (초)
     private bool isInvincible = false;       // 무적 상태 여부
     public bool GetIsInvincible() { return isInvincible; }
-    private Renderer playerRenderer;         // 플레이어의 Renderer
+    private Renderer playerRenderer;        // 플레이어의 Renderer
+    private int playerLayer;                // 레이어, Player
+    private int monsterLayer;                // 레이어, Monster
 
     private HPManager playerHPManager;
 
@@ -30,7 +32,9 @@ public class PlayerController : MonoBehaviour {
         animator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         playerRenderer = GetComponent<Renderer>(); // 플레이어의 Renderer 컴포넌트 가져오기 (시각적 효과를 위해)
-        
+        playerLayer = LayerMask.NameToLayer("Player");      // 레이어, Player
+        monsterLayer = LayerMask.NameToLayer("Monster");    // 레이어. Monster
+
         playerHPManager = GetComponent<HPManager>();
     }
     
@@ -112,6 +116,9 @@ public class PlayerController : MonoBehaviour {
         playerRenderer.enabled = true; // 무적 해제 시 원래 상태로 복구
 
         isInvincible = false; // 무적 상태 해제
+
+        // 충돌 무시
+        Physics.IgnoreLayerCollision(playerLayer, monsterLayer, false);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -125,18 +132,25 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Monster") && !isInvincible && !isDead)
         {
-            if (!isInvincible)
-            {
-                playerHPManager.TakeDamage(1);
-            }
+            playerHPManager.TakeDamage(1);
+
+            Collider monsterCollider = collision.collider;
+
+            // 플레이어와 몬스터 간 충돌 비활성화
+            Physics.IgnoreLayerCollision(playerLayer, monsterLayer, true);
 
             StartCoroutine(ActivateInvincibility()); // 무적 상태 활성화 코루틴 시작
 
             // 플레이어가 몬스터와 충돌했을 때 뒤로 밀리게 하는 힘 추가
             Vector3 knockbackDirection = (transform.position - collision.transform.position).normalized;
-            knockbackDirection = new Vector3(knockbackDirection.x * 50f, 1f, 0); // X축으로만 움직이도록 Y, Z값을 0으로 설정
-            float knockbackForce = 500f; // 뒤로 밀리는 힘의 크기
-            playerRigidbody.AddForce(knockbackDirection * knockbackForce);
+
+            Vector3 moveDirection = transform.right * knockbackDirection.x * speed;  // 방향에 따른 x, z값 구하기
+
+            float knockbackForce = 3000f; // 뒤로 밀리는 힘의 크기
+            knockbackDirection = new Vector3(moveDirection.x, 0.2f, moveDirection.z) * knockbackForce; // X축으로만 움직이도록 Y, Z값을 0으로 설정
+
+            playerRigidbody.AddForce(knockbackDirection);
+
         }
         else
         {
@@ -156,7 +170,6 @@ public class PlayerController : MonoBehaviour {
         if (collision.gameObject.CompareTag("Monster"))
         {
         }
-            
     }
 
     private void OnCollisionExit(Collision collision) {

@@ -459,6 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platformPrefab: {fileID: 5306782733025688830, guid: 629cbb9e7cfffaa40a285bf593395837, type: 3}
+  monsterSpawner: {fileID: 1766566507}
 --- !u!4 &1325959632
 Transform:
   m_ObjectHideFlags: 0
@@ -541,6 +542,55 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1800070794}
+--- !u!1 &1766566506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1766566508}
+  - component: {fileID: 1766566507}
+  m_Layer: 0
+  m_Name: MonsterSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1766566507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766566506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a0bdc95929a4a644b456c4d2cf4e4c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPrefabs:
+  - {fileID: 3357673511565627701, guid: 79dafa48e8632da4ca706c8d9fbeec25, type: 3}
+  - {fileID: 7049409472809578570, guid: 68c062f871f72a34b917c53ae82ecc29, type: 3}
+  spawnInterval: 5
+  maxMonstersPerPlatform: 3
+--- !u!4 &1766566508
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766566506}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.150876, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1800070791
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,7 +607,7 @@ GameObject:
   - component: {fileID: 1800070799}
   - component: {fileID: 1800070800}
   - component: {fileID: 1800070801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -826,7 +876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb7e2bdbbb5bc24ab5db7fe732d5580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 3
+  maxHP: 100
   currentHP: 0
   heartPrefab: {fileID: 2976065903420762990, guid: 2ffa4deb6516e5b498ff44346b14c1cd, type: 3}
   offset: {x: 0, y: 0.8, z: 0}
@@ -840,3 +890,4 @@ SceneRoots:
   - {fileID: 1325959632}
   - {fileID: 1757670024}
   - {fileID: 1800070794}
+  - {fileID: 1766566508}
