@@ -8,7 +8,7 @@ public class HPManager : MonoBehaviour
     public int currentHP; // 현재 HP
 
     public GameObject heartPrefab; // 하트 프리팹
-    public Vector3 offset = new Vector3(0, 2, 0);
+    public Vector3 offset = new Vector3(0, 0.9f, 0);
 
     private PlayerController player; // 플레이어
 

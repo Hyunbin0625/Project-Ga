@@ -43,7 +43,7 @@ public class Monster02Controller : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);  // 몬스터와 플레이어 사이의 거리를 계산
-        
+
         if (currentChargeTime <= chargeCooldown)
             currentChargeTime += Time.deltaTime;
         if (distanceToPlayer <= chargeDistance && !isCharging && currentChargeTime >= chargeCooldown) // 공격 사거리 내에 플레이어가 있는 경우

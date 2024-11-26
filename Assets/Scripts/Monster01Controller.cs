@@ -42,7 +42,7 @@ public class Monster01Controller : MonoBehaviour
         if (!isAttack && distanceToPlayer <= chaseDistance)  // 플레이어가 추격 거리 내에 있지만 공격 거리 밖에 있는지 확인
         {
             isMovingRandomly = false;   // 추격 상태가 아니니, false 초기화
-            
+
             StartChasing();  // 추격 시작
         }
         else if (!isAttack)
@@ -153,7 +153,7 @@ public class Monster01Controller : MonoBehaviour
                 isMoving = false;   // 다음 순서인 Idle 실행을 위해, false 저장
                 SetRandomDirection(); // 미리 다음 방향을 설정
             }
-            else if(isInPlatformZone)   // 벽과 충돌 했을 때
+            else if (isInPlatformZone)   // 벽과 충돌 했을 때
             {
                 currentTime = 0f;   // 사용한 currentTime 초기화
                 isMoving = false;   // 다음 순서인 Idle 실행을 위해, false 저장
@@ -187,13 +187,13 @@ public class Monster01Controller : MonoBehaviour
         if (other.gameObject.name == "Platformzone_L")
         {
             isInPlatformZone = true;
-            if(!isChasing)
+            if (!isChasing)
                 transform.position += Vector3.right * speed * Time.deltaTime;    // 반대 방향으로 이동
         }
         else if (other.gameObject.name == "Platformzone_R")
         {
             isInPlatformZone = true;
-            if(!isChasing)
+            if (!isChasing)
                 transform.position += Vector3.left * speed * Time.deltaTime;    // 반대 방향으로 이동
         }
     }

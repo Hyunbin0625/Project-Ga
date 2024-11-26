@@ -26,7 +26,7 @@ public class MonsterSpawner : MonoBehaviour
 
             // 몬스터 생성
             GameObject newMonster = Instantiate(monsterPrefabs[randomMonsterIndex], spawnPosition, platform.transform.rotation);
-            
+
             //newMonster.transform.SetParent(platform.transform); // 플랫폼의 자식으로 설정
             spawnedMonsters.Add(newMonster);
         }

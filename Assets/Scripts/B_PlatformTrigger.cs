@@ -1,25 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class PlatformTrigger : MonoBehaviour
+public class B_PlatformTrigger : MonoBehaviour
 {
     public PlatformSpawner spawner; // 플랫폼 스포너 참조
-    public bool canSpawn = true; // 플랫폼을 생성할 수 있는지 여부
 
     private Vector3 initialPlayerRotation; // 플레이어의 초기 회전 값을 저장할 변수
-    private float platformRotationY;    // 플랫폼의 회전 y값
+    private float platformRotationX = 0;    // 플랫폼의 회전 x값
+    private float platformRotationY = 0;    // 플랫폼의 회전 x값
     private Vector3 initialPlayerPosition; // 플레이어의 초기 위치 값을 저장할 변수
     private float platformLeftEndZ;     // 플랫폼의 왼쪽 끝 z값
 
     private float triggerStartX; // 트리거 시작 지점의 x 좌표
     private float triggerEndX; // 트리거 끝 지점의 x 좌표
 
+    // Start is called before the first frame update
     void Start()
     {
-        canSpawn = true;
-
         // 트리거의 시작과 끝 지점 x 좌표 계산
         triggerStartX = transform.position.x - transform.lossyScale.x / 2;
         triggerEndX = transform.position.x + transform.lossyScale.x / 2;
@@ -36,58 +34,48 @@ public class PlatformTrigger : MonoBehaviour
 
         // 왼쪽 끝의 x, z 좌표 계산
         platformLeftEndZ = centerPosition.z + halfWidth * Mathf.Sin(angleRad);
-
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.CompareTag("Player") && canSpawn)
-        {
-            // 플레이어가 이 트리거 존에 진입하면 다음 플랫폼 생성
-            spawner.TrySpawnPlatform();
-
-            // 플레이어의 초기 회전 값 저장
-            //initialPlayerRotation = collision.transform.rotation.eulerAngles;
-            // 플레이어의 초기 위치 값 저장
-            initialPlayerPosition = collision.transform.position;
-
-            // 한 번만 생성하도록 canSpawn을 false로 설정
-            canSpawn = false;
-        }
+        // 플레이어의 초기 회전 값 저장
+        //initialPlayerRotation = collision.transform.rotation.eulerAngles;
+        // 플레이어의 초기 위치 값 저장
+        //initialPlayerPosition = collision.transform.position;
     }
 
     private void OnTriggerStay(Collider collision)
     {
-        if (collision.CompareTag("Player") && !canSpawn)
+        if (collision.CompareTag("Player"))
         {
             // 트리거 범위 내에서 플레이어의 위치를 -1 ~ 1 사이의 값으로 정규화
             float normalizedPosition = (collision.transform.position.x - triggerStartX) / (triggerEndX - triggerStartX);
 
             // 정규화 값을 사용해 해당 각도 구하기
+            float targetXRotate;
             float targetYRotate;
-            float targetZPosition;
             if (normalizedPosition < 0)
             {
+                targetXRotate = initialPlayerRotation.x;
                 targetYRotate = initialPlayerRotation.y;
-                targetZPosition = initialPlayerPosition.z;
             }
             else if (normalizedPosition > 1)
             {
+                targetXRotate = platformRotationX;
                 targetYRotate = platformRotationY;
-                targetZPosition = platformLeftEndZ;
             }
             else
             {
+                targetXRotate = normalizedPosition * (platformRotationX - initialPlayerRotation.x) + initialPlayerRotation.x;
                 targetYRotate = normalizedPosition * (platformRotationY - initialPlayerRotation.y) + initialPlayerRotation.y;
-                targetZPosition = normalizedPosition * (platformLeftEndZ - initialPlayerPosition.z) + initialPlayerPosition.z;
             }
 
-            Quaternion targetRotation = Quaternion.Euler(initialPlayerRotation.x, targetYRotate, collision.transform.rotation.z);
-            Vector3 targetPosition = new Vector3(collision.transform.position.x, collision.transform.position.y, targetZPosition);
+            Quaternion targetRotation = Quaternion.Euler(targetXRotate, targetYRotate, collision.transform.rotation.z);
 
             // 플레이어의 회전 값에 반영
             collision.transform.rotation = targetRotation;
-            collision.transform.position = targetPosition;
+            collision.transform.position += new Vector3(3f, 0, 0) * Time.deltaTime; // 최소 속도로 이동
+
         }
     }
 
@@ -97,13 +85,4 @@ public class PlatformTrigger : MonoBehaviour
         initialPlayerRotation.y = rotationY;
     }
 
-    public float GetPlatformRotation()
-    {
-        return platformRotationY;
-    }
-
-    public void SetPlatformRotation(float rotationY)
-    {
-        platformRotationY = rotationY;
-    }
 }
