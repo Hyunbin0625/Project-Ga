@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour
 
         GameManager.instance.OnPlayerDead();
     }
+
     private IEnumerator ActivateInvincibility()
     {
         isInvincible = true; // 무적 상태 활성화
@@ -209,7 +210,7 @@ public class PlayerController : MonoBehaviour
             playerRigidbody.AddForce(knockbackDirection);
 
         }
-        else
+        else 
         {
             if (collision.contacts[0].normal.y > 0.7f)   // 충돌한 것 중 첫 번째,  0.7f는 각도
             {
@@ -217,6 +218,8 @@ public class PlayerController : MonoBehaviour
                 isGrounded = true;
                 jumpCount = 0;
             }
+
+            
         }
 
     }

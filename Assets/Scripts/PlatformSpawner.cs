@@ -60,8 +60,12 @@ public class PlatformSpawner : MonoBehaviour
 
         // 충돌 감지용 Zone에 PlatformTrigger의 spawner 변수 설정
         PlatformTrigger platformTrigger = newPlatform.GetComponentInChildren<PlatformTrigger>();
+        // 현재 stage를 저장하기 위해, platform 스크립트 생성
+        Platform platform = newPlatform.GetComponentInChildren<Platform>();
         if (platformTrigger != null)    // 플랫폼 트리거 재대로 생성되었다면
         {
+            platform.SetStage(platformCount);   // 현재 stage 저장
+
             platformTrigger.spawner = this; // 자식, 플랫폼 트리거의 spawner에 자신(PlatformSpawner) 저장
             platformTrigger.SetPlatformRotation(0);
             platformTrigger.SetInitialPlayerRotation(0);
@@ -104,8 +108,12 @@ public class PlatformSpawner : MonoBehaviour
 
             // 충돌 감지용 Zone에 PlatformTrigger의 spawner 변수 설정
             PlatformTrigger platformTrigger = newPlatform.GetComponentInChildren<PlatformTrigger>();
+            // 현재 stage를 저장하기 위해, platform 스크립트 생성
+            Platform platform = newPlatform.GetComponentInChildren<Platform>();
             if (platformTrigger != null)    // 플랫폼 트리거 재대로 생성되었다면
             {
+                platform.SetStage(platformCount);   // 현재 stage 저장
+
                 platformTrigger.spawner = this; // 자식, 플랫폼 트리거의 spawner에 자신(PlatformSpawner) 저장
                 platformTrigger.SetPlatformRotation(randomYRotation);
                 platformTrigger.SetInitialPlayerRotation(lastPlatform.GetComponentInChildren<PlatformTrigger>().GetPlatformRotation());

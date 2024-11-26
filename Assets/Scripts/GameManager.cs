@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,9 +16,12 @@ public class GameManager : MonoBehaviour
 
     public bool isGameover = false; // 게임 오버 상태
     public Text stageText; // 점수를 출력할 UI 텍스트
+    public GameObject stageTextUI; // 게임 오버시 활성화 할 UI 게임 오브젝트
     public GameObject gameoverUI; // 게임 오버시 활성화 할 UI 게임 오브젝트
 
-    private int stage = 0; // 게임 점수
+    public CanvasGroup stageCanvasGroup; // CanvasGroup을 추가하여 UI의 투명도를 제어
+    public float stageUIduration = 3f;          // Stage UI 출력 시간
+    public float fadeDuration = 0.5f; // 페이드 효과 시간
 
     // 게임 시작과 동시에 싱글톤을 구성
     void Awake()
@@ -56,14 +60,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 점수를 증가시키는 메서드
-    public void AddScore(int newStage)
+    public IEnumerator ShowTemporaryUI(string stage, Color color)
     {
-        if (!isGameover)
+        // 텍스트와 색상 설정
+        stageText.text = stage;
+        stageText.color = color;
+
+        StartCoroutine(FadeCanvasGroup(stageCanvasGroup, 0f, 1f, fadeDuration)); // 페이드 인
+
+        // 텍스트를 일정 시간 표시
+        yield return new WaitForSeconds(stageUIduration); // 표시 유지
+
+        StartCoroutine(FadeCanvasGroup(stageCanvasGroup, 1f, 0f, fadeDuration)); // 페이드 아웃
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float startAlpha, float endAlpha, float duration)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
         {
-            stage += newStage;
-            stageText.text = "Stage: " + stage;
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration); // 부드럽게 투명도 조정
+            yield return null;
         }
+
+        canvasGroup.alpha = endAlpha;
     }
 
     // 플레이어 캐릭터가 사망시 게임 오버를 실행하는 메서드

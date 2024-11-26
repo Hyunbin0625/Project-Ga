@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 발판으로서 필요한 동작을 담은 스크립트
-public class Platform : MonoBehaviour
+public class B_Platform : MonoBehaviour
 {
     //public GameObject[] obstacles;  // 장애물 오브젝트들
     //private bool stepped = false;   // 플레이어 캐릭터가 밟았었는가
@@ -27,8 +27,8 @@ public class Platform : MonoBehaviour
 
             // GameManager의 ShowTemporaryUI를 StartCoroutine으로 호출
             GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-            string stageText = "Stage: " + stage;
-            StartCoroutine(gameManager.ShowTemporaryUI(stageText, Color.white));
+            string stageText = "!> Boss Stage <!";
+            StartCoroutine(gameManager.ShowTemporaryUI(stageText, Color.red));
         }
     }
 }
