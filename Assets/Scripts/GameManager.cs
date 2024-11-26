@@ -42,12 +42,6 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("씬에 두개 이상의 게임 매니저가 존재합니다!");
             Destroy(gameObject);
         }
-
-        // 마우스 커서 숨기기
-        Cursor.visible = false;
-
-        // 마우스 커서를 화면 중앙에 고정
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
