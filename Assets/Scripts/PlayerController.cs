@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 700f;  // 점프 힘
 
     private int jumpCount = 0;      // 누적 점프 횟수
-    private bool isGrounded = false; // 바닥에 닿았는지 나타냄
+    private bool isGrounded = true; // 바닥에 닿았는지 나타냄
     private bool isMoved = false;
     private bool isDead = false;    // 사망 상태
     public float speed = 8f;
@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     private HPManager playerHPManager;
     public PlatformSpawner platformSpawner; // PlatformSpawner 스크립트를 참조
 
+    public bool canMove = false; // 플레이어가 움직일 수 있는지 여부
+
+    public void EnableMovement(bool enable) { canMove = enable; } // 외부에서 움직임 제어
+
     private void Start()
     {
         // 초기화
@@ -47,8 +51,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // 상태 값에 따라 Animation 적용
+        animator.SetBool("Grounded", isGrounded);
+        animator.SetBool("Moved", isMoved);
+
         if (isDead)
             return;
+
+        if (!canMove)
+            return; // 움직일 수 없는 상태면 입력 차단
 
         if (isBossZone)
         {
@@ -134,10 +145,6 @@ public class PlayerController : MonoBehaviour
             // 오디오 소스 재생
             playerAudio.Play();
         }
-
-        // 상태 값에 따라 Animation 적용
-        animator.SetBool("Grounded", isGrounded);
-        animator.SetBool("Moved", isMoved);
     }
 
     public void Die()

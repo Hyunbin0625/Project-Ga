@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public GameObject gameoverUI; // 게임 오버시 활성화 할 UI 게임 오브젝트
 
     public CanvasGroup stageCanvasGroup; // CanvasGroup을 추가하여 UI의 투명도를 제어
+    public CanvasGroup gameoverCanvasGroup; // GameOver UI의 투명도를 제어
+
     public float stageUIduration = 3f;          // Stage UI 출력 시간
     public float fadeDuration = 0.5f; // 페이드 효과 시간
 
@@ -49,6 +51,9 @@ public class GameManager : MonoBehaviour
         // 게임 오버 상태에서 게임을 재시작할 수 있게 하는 처리
         if (Input.GetMouseButtonDown(0) && isGameover)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             // 게임 오버 상태에서 마우스 왼쪽 버튼을 누르면 현재 씬 재시작
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -86,6 +91,18 @@ public class GameManager : MonoBehaviour
     public void OnPlayerDead()
     {
         isGameover = true;
-        gameoverUI.SetActive(true);
+
+        // GameOver UI 활성화와 페이드인 효과
+        StartCoroutine(FadeInGameoverUI());
+    }
+
+    private IEnumerator FadeInGameoverUI()
+    {
+        // CanvasGroup을 통해 페이드인
+        if (gameoverCanvasGroup != null)
+        {
+            gameoverUI.SetActive(true); // GameOver UI 활성화
+            yield return StartCoroutine(FadeCanvasGroup(gameoverCanvasGroup, 0f, 1f, fadeDuration)); // 페이드 인
+        }
     }
 }

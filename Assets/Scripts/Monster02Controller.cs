@@ -30,6 +30,7 @@ public class Monster02Controller : MonoBehaviour
 
     private Direction currentDirection; // 현재 이동 방향을 저장하는 변수
 
+
     // Start is called before the first frame update
     void Start()
     {
